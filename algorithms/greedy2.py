@@ -1,13 +1,40 @@
 """
-'greedy2' algorithm implementation, as presented by Addis et al.
+Implementacao do 'greedy2', como proposto por Addis et al.
 
 """
 
 from graph import Graph
 
-from f_function import f_function
 
 import math
+
+
+"""
+Funcao de custo  'f', que deve ser minimizada pela abordagem gulosa. Retorna o numero de pares conectados em G mediante a exclusao do conjunto S de vertices.
+Performa uma DFS
+"""
+
+
+def f_function(graph: Graph, S: set[int]):
+    n = graph.num_vertices()
+    visited = [False] * n
+    total = 0
+    for i in range(n):
+        if i in S or visited[i]:
+            continue
+        component = []
+        stack = [i]
+        visited[i] = True
+        while stack:
+            u = stack.pop()
+            component.append(u)
+            for v in graph.adj_list[u]:
+                if v not in S and not visited[v]:
+                    visited[v] = True
+                    stack.append(v)
+        k = len(component)
+        total += k * (k - 1) // 2
+    return total
 
 
 def greedy2(graph: Graph, k: int) -> set[int]:
@@ -24,7 +51,6 @@ def greedy2(graph: Graph, k: int) -> set[int]:
             if curr_f_value < prev_f_value:
                 prev_f_value = curr_f_value
                 critical_node = i
-
         S.add(critical_node)
 
     return S

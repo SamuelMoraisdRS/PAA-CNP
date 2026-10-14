@@ -1,0 +1,38 @@
+======================================================================
+RELATÓRIO DO EXPERIMENTO — Problema dos Nós Críticos (CNP)
+======================================================================
+Instância ................ BarabasiAlbert_n500m1
+Arquivo .................. Ventresca/BarabasiAlbert_n500m1.txt
+Vértices (n) ............. 500
+Arestas (m) .............. 499
+K (máx. de remoções) ..... 12
+Algoritmo ................ greedy2 ingênuo (recalcula f do zero), O(k·n·(n+m))
+Tempo de execução ........ 3.995 s
+f(G) sem remoções ........ 124750
+f(G\R) obtido ............ 1248
+Melhor valor conhecido ... 195
+Gap para o melhor ........ +540.00%
+
+MELHOR SOLUÇÃO ENCONTRADA
+|R| ...................... 12
+f(G\R) ................... 1248
+R (na ordem de escolha):
+  0 1 11 23 13 18 4 41 29 5 65 8
+R (ordenado):
+  0 1 4 5 8 11 13 18 23 29 41 65
+======================================================================
+
+EVOLUÇÃO DE f(G\R) A CADA ITERAÇÃO
+  iteração   vértice removido       f(G\R)
+         1                  0        12354
+         2                  1         7052
+         3                 11         5319
+         4                 23         3697
+         5                 13         3222
+         6                 18         2747
+         7                  4         2315
+         8                 41         1956
+         9                 29         1687
+        10                  5         1508
+        11                 65         1356
+        12                  8         1248

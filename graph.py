@@ -4,6 +4,8 @@ Instances must be created from a text source file following the
 Ventresca format.
 """
 
+from __future__ import annotations
+
 
 class Graph:
     def __init__(self, filepath: str):
@@ -21,6 +23,10 @@ class Graph:
             vertice = int(vertice.strip())
             neighbour_list = [int(v) for v in neighbours.split() if v]
             adj_list[vertice] = neighbour_list
+            # NOTE : existem paralelas em alguns vertices (duas arestas conectando os mesmos dois vertices).
+            # Para este problema, essas arestas nao sao relevantes, pois queremos apenas saber a conexao entre os nos,
+            # entao vamos ignora-las removendo os valores duplicados nas listas de adjacencia
+            adj_list[vertice] = list(dict.fromkeys(neighbour_list))
 
         self.adj_list = adj_list
 
