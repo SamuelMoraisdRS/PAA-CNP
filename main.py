@@ -1,16 +1,16 @@
 """
-Command line interface for the Critical Node Problem (CNP) solved with the
-'greedy2' constructive heuristic (Addis et al.).
+CLI para execucao dos experimentos referentes ao CNP utilizando a heuristica construtiva 'greedy2'
+proposta por Addis et al.
 
-Usage (from any folder): python3 main.py
+Usage:
+(from any folder): python3 main.py
 
-O usuario escolha uma instancia, K e o algoritmo a ser usado
-The user picks an instance, K and the algorithm version; the experiment
-report and the best solution found are shown on screen and saved in
-'resultados/'. Only the Python standard library is used.
+O usuario escolhe uma instancia, o valor K e o algoritmo a ser usado.
+Se nao selecionar K, usaremos o valor padrao extraido da Tabela IV de Zhou et al.
+Se nao selecionar qual versao do algoritmo usar, executamos como padrao a versao otimizada (greedy2_dfs)
+Os resultados do experimento sao mostrado em tela e salvos em arquivo na pasta 'resultados'
 """
 
-# Allows annotations like list[int] on Python < 3.9
 from __future__ import annotations
 
 import csv
@@ -24,14 +24,13 @@ from f_function import f_function
 from algorithms.greedy2 import greedy2
 from algorithms.greedy2_dfs import greedy2_dfs
 
-# Paths are relative to this file, so the program works from any folder
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 INSTANCE_DIRS = ["Ventresca", "testes"]
 RESULTS_DIR = os.path.join(BASE_DIR, "resultados")
 
-# (K, best known objective value) of each instance.
-# Synthetic benchmark of Ventresca (2012). K and best known values from
-# Zhou, Hao & Glover (2019), "Memetic search for identifying critical nodes
+#  NOTE : Mapeamento das instancias deste trabalho. O dicionario mapeia o grafo de entrada ao
+# seu respectivo K padrao e ao KBV, ambos extraidos da Tabela IV de
+# Synthetic benchmark of Ventresca (2012). K and best known values Zhou, Hao & Glover (2019), "Memetic search for identifying critical nodes
 # in sparse graphs", IEEE Transactions on Cybernetics, Table IV.
 INSTANCES = {
     "BarabasiAlbert_n500m1": (50, 195),
@@ -50,8 +49,6 @@ INSTANCES = {
     "WattsStrogatz_n500": (125, 2072),
     "WattsStrogatz_n1000": (200, 109807),
     "WattsStrogatz_n1500": (265, 13098),
-    # Example from the study notes; 2 is the optimum for K=2, found by
-    # exhaustive search in validar.py (greedy2 finds 3)
     "exemplo7": (2, 2),
 }
 
@@ -61,17 +58,15 @@ ALGORITHMS = {
 }
 
 LINE = "=" * 70
-# Backslashes are not allowed inside f-string braces before Python 3.12
 F_LABEL = "f(G\\R)"
 
 
+# NOTE : Para ordenar os nomes das instancias corretamente
 def natural_key(name: str) -> list:
-    """Sorts 'n500' before 'n1000' (plain string sorting would not)."""
     return [int(t) if t.isdigit() else t for t in re.split(r"(\d+)", name)]
 
 
 def list_instances() -> list[tuple[str, str]]:
-    """(name, path) of every instance file, benchmark first."""
     instances = []
     for folder in INSTANCE_DIRS:
         folder_path = os.path.join(BASE_DIR, folder)
@@ -91,7 +86,7 @@ def run_experiment(name: str, path: str, k: int, alg_key: str) -> dict:
     order, history = algorithm(graph, k)
     elapsed = time.perf_counter() - start
 
-    # Teste de sanidade: calcula f(S) com o S final para averiguar se condiz com o valor minimo
+    # NOTE : Teste de sanidade: calcula f(S) com o S final para averiguar se condiz com o valor minimo
     # de 'history'
     final_f = f_function(graph, set(order))
     if history and history[-1] != final_f:
@@ -115,6 +110,9 @@ def run_experiment(name: str, path: str, k: int, alg_key: str) -> dict:
         "order": order,
         "history": history,
     }
+
+
+# == Funcoes auxiliares de interface
 
 
 def gap_text(value: int, best_known) -> str:
@@ -141,7 +139,7 @@ def wrap_list(values: list[int]) -> str:
 
 
 def format_report(r: dict) -> str:
-    ''' Formata output do teste'''
+    """Formata output do teste"""
     best = r["best_known"] if r["best_known"] is not None else "—"
     lines = [
         LINE,
@@ -246,6 +244,18 @@ def run_all(instances: list[tuple[str, str]]) -> None:
         for name, path in instances
         if os.path.basename(os.path.dirname(path)) == "Ventresca" and name in INSTANCES
     ]
+    print(
+        f"Relatório completo (com a evolução de f) salvo em: "
+        f"{os.path.relpath(out_path, BASE_DIR)}"
+    )
+
+
+def run_all(instances: list[tuple[str, str]]) -> None:
+    benchmark = [
+        (name, path)
+        for name, path in instances
+        if os.path.basename(os.path.dirname(path)) == "Ventresca" and name in INSTANCES
+    ]
     alg_key = choose_algorithm()
     print()
 
@@ -258,6 +268,10 @@ def run_all(instances: list[tuple[str, str]]) -> None:
         results.append(r)
         print(f"f(G\\R)={r['final_f']:<8} ({r['time']:.2f} s)")
 
+    header = (
+        f"{'Instância':<24} {'n':>5} {'m':>6} {'K':>4} {F_LABEL:>9} "
+        f"{'melhor':>9} {'gap':>9} {'tempo(s)':>9}"
+    )
     header = (
         f"{'Instância':<24} {'n':>5} {'m':>6} {'K':>4} {F_LABEL:>9} "
         f"{'melhor':>9} {'gap':>9} {'tempo(s)':>9}"

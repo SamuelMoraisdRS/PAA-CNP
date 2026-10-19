@@ -4,53 +4,37 @@ Implementacao do 'greedy2', como proposto por Addis et al.
 """
 
 from graph import Graph
+from f_function import f_function
 
 
 import math
 
 
-"""
-Funcao de custo  'f', que deve ser minimizada pela abordagem gulosa. Retorna o numero de pares conectados em G mediante a exclusao do conjunto S de vertices.
-Performa uma DFS
-"""
-
-
-def f_function(graph: Graph, S: set[int]):
-    n = graph.num_vertices()
-    visited = [False] * n
-    total = 0
-    for i in range(n):
-        if i in S or visited[i]:
-            continue
-        component = []
-        stack = [i]
-        visited[i] = True
-        while stack:
-            u = stack.pop()
-            component.append(u)
-            for v in graph.adj_list[u]:
-                if v not in S and not visited[v]:
-                    visited[v] = True
-                    stack.append(v)
-        k = len(component)
-        total += k * (k - 1) // 2
-    return total
-
-
-def greedy2(graph: Graph, k: int) -> set[int]:
+def greedy2(graph: Graph, k: int) -> tuple[list[int], list[int]]:
     S = set()
+    order = []
+    history = []
+    # guarda para o caso k > |V|
+    k = min(k, graph.num_vertices())
     while len(S) < k:
-        critical_node = 0
-        curr_lowest_f_value = math.inf
-        prev_f_value = math.inf
-        # i = argmax (f(S) - f(S U {i}))
+        critical_node = None
+        # menor valor encontrado para a funcao objetivo
+        lowest_f_value = math.inf
+        # i = argmax (f(S) - f(S U {i})) = argmin f(S U {i})
         for i in range(graph.num_vertices()):
             if i in S:
                 continue
+            # valor de f(S U {i})
             curr_f_value = f_function(graph, S | {i})
-            if curr_f_value < prev_f_value:
-                prev_f_value = curr_f_value
+            if curr_f_value < lowest_f_value:
+                lowest_f_value = curr_f_value
                 critical_node = i
-        S.add(critical_node)
 
-    return S
+        S.add(critical_node)
+        order.append(critical_node)
+        history.append(lowest_f_value)
+        # se a remocao nao diminuir f
+        if lowest_f_value == 0:
+            break
+
+    return order, history

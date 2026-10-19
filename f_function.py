@@ -11,7 +11,6 @@ from collections import deque
 
 from graph import Graph
 
-
 """
 Implementacao de C(n, 2). Retorna o numero de pares conectados em um componente com n vertices.
 Usada para retornar o valor efetivo da funcao objetivo "f"
@@ -19,7 +18,6 @@ Usada para retornar o valor efetivo da funcao objetivo "f"
 
 
 def pairs(size: int) -> int:
-
     return size * (size - 1) // 2
 
 
@@ -32,7 +30,6 @@ Com o numero de vertices nos componentes usamos a funcao @pairs para calcular o 
 
 
 def f_function(graph: Graph, S: set[int]) -> int:
-    """Computes f(G \\ S) from scratch with a BFS per component, O(n+m)."""
     n = graph.num_vertices()
 
     # Marca os vertices excluidos como visitados para nao fazer sua BFS
@@ -59,7 +56,6 @@ def f_function(graph: Graph, S: set[int]) -> int:
                 if not visited[w]:
                     visited[w] = True
                     queue.append(w)
-
         # Adiciona o numero de pares ao total global de G \\ S
         total += pairs(size)
 
