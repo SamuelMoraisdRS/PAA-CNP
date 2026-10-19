@@ -45,7 +45,7 @@ def f_function(graph: Graph, S: set[int]) -> int:
             continue
 
         visited[source] = True
-        # Pilha da BFS
+        # Fila da BFS
         queue = deque([source])
         size = 0
         # loop da BFS

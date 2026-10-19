@@ -1,6 +1,6 @@
 """
 Implementação de classe para grafos não direcionados utilizando lista de adjacência.
-Os objetos são instanciados a partir de documentos .txt no formatoproposto por Ventresca
+Os objetos são instanciados a partir de documentos .txt no formato proposto por Ventresca
 """
 
 from __future__ import annotations
@@ -21,7 +21,6 @@ class Graph:
             vertice, neighbours = line.split(":")
             vertice = int(vertice.strip())
             neighbour_list = [int(v) for v in neighbours.split() if v]
-            adj_list[vertice] = neighbour_list
 
             # NOTE : existem arestas paralelas em alguns vertices (duas arestas conectando os mesmos dois vertices).
             # Para este problema, essas arestas nao sao relevantes, pois queremos apenas saber a conexao entre os nos,

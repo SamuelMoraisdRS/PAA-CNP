@@ -244,18 +244,6 @@ def run_all(instances: list[tuple[str, str]]) -> None:
         for name, path in instances
         if os.path.basename(os.path.dirname(path)) == "Ventresca" and name in INSTANCES
     ]
-    print(
-        f"Relatório completo (com a evolução de f) salvo em: "
-        f"{os.path.relpath(out_path, BASE_DIR)}"
-    )
-
-
-def run_all(instances: list[tuple[str, str]]) -> None:
-    benchmark = [
-        (name, path)
-        for name, path in instances
-        if os.path.basename(os.path.dirname(path)) == "Ventresca" and name in INSTANCES
-    ]
     alg_key = choose_algorithm()
     print()
 
@@ -268,10 +256,6 @@ def run_all(instances: list[tuple[str, str]]) -> None:
         results.append(r)
         print(f"f(G\\R)={r['final_f']:<8} ({r['time']:.2f} s)")
 
-    header = (
-        f"{'Instância':<24} {'n':>5} {'m':>6} {'K':>4} {F_LABEL:>9} "
-        f"{'melhor':>9} {'gap':>9} {'tempo(s)':>9}"
-    )
     header = (
         f"{'Instância':<24} {'n':>5} {'m':>6} {'K':>4} {F_LABEL:>9} "
         f"{'melhor':>9} {'gap':>9} {'tempo(s)':>9}"

@@ -4,7 +4,7 @@ Ventresca e Aleman (2015).
 
 Para evitar calcular f para cada vertice candidato, é feita uma DFS para
 computar f(G \\ (S U {v})) para todos os vertices v de uma só vez. Cada iteração
-terá custo O(|V|+|E|), com as k iterações, temos a complexidade O(k*|V|*|E|)
+terá custo O(|V|+|E|), com as k iterações, temos a complexidade O(k*(|V|+|E|))
 """
 
 from __future__ import annotations
@@ -57,7 +57,7 @@ def evaluate_all(graph: Graph, removed: set[int]) -> list[int | None]:
     # Valor total de f
     total_f = 0
 
-    # COntador de passos da DFS, para preencher o vetor dfn
+    # Contador de passos da DFS, para preencher o vetor dfn
     counter = 0
 
     for root in range(n):
@@ -111,7 +111,7 @@ def evaluate_all(graph: Graph, removed: set[int]) -> list[int | None]:
             remainder = comp_size - 1 - cut_mass[v]
 
             # Preenchendo o valor de f para a remocao de v contando apenas o PRÓPRIO COMPONENTE GERADO POR V.
-            # O valor final dfepende do f total
+            # O valor final depende do f total
             result[v] = split_value[v] + pairs(remainder) - comp_pairs
 
     # NOTE : Soma os valores de f por componente com o f total. O f total só é obtido depois de processar todos os componentes individualmente, então precisa ser feito depois do loop principal. adiciona custo |V|.
@@ -122,7 +122,7 @@ def evaluate_all(graph: Graph, removed: set[int]) -> list[int | None]:
     return result
 
 
-"""Implementação adaptada do greedy2 utilizandoa a orimização. A estrutura permanece a mesma, trocando apenas a lógica de seleção"""
+"""Implementação adaptada do greedy2 utilizando a otimização. A estrutura permanece a mesma, trocando apenas a lógica de seleção"""
 
 
 def greedy2_dfs(graph: Graph, k: int) -> tuple[list[int], list[int]]:

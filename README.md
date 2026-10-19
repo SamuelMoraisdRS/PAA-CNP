@@ -316,7 +316,7 @@ As duas versões chegam ao mesmo f em todas as instâncias; muda só o tempo.
 | WattsStrogatz_n500 | 500 | 3,38 | 0,081 | ≈ 42× |
 | WattsStrogatz_n1000 | 1000 | 34,34 | 0,454 | ≈ 76× |
 | WattsStrogatz_n1500 | 1500 | 85,59 | 0,525 | ≈ 163× |
-| **Total** | | **≈ 1238 s (20,6 min)** | **≈ 2,7 s** | |
+| **Total** | | **≈ 1210 s (20,2 min)** | **≈ 2,7 s** | |
 
 Dentro de cada família, a aceleração cresce com n, como prevê a análise: a
 versão ingênua tem um fator n a mais por iteração. Entre famílias, a

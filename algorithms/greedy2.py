@@ -3,6 +3,8 @@ Implementacao do 'greedy2', como proposto por Addis et al.
 
 """
 
+from __future__ import annotations
+
 from graph import Graph
 from f_function import f_function
 
@@ -33,7 +35,7 @@ def greedy2(graph: Graph, k: int) -> tuple[list[int], list[int]]:
         S.add(critical_node)
         order.append(critical_node)
         history.append(lowest_f_value)
-        # se a remocao nao diminuir f
+        # f = 0: nao sobrou nenhuma aresta, remover mais vertices nao diminui f
         if lowest_f_value == 0:
             break
 
